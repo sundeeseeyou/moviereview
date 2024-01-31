@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use Case Diagram</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    svg {
+        width: 400px;
+        height: 200px;
+    }
+    .actor, .use-case {
+        fill: #ccc;
+    }
+    .actor-text, .use-case-text {
+        fill: #000;
+        font-size: 12px;
+        text-anchor: middle;
+    }
+    .association, .include {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2;
+        marker-end: url(#arrowhead);
+    }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 400 200">
+    <!-- Arrowhead marker definition -->
+    <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ccc" />
+        </marker>
+    </defs>
+    <!-- Actors -->
+    <circle class="actor" cx="50" cy="50" r="20" />
+    <text class="actor-text" x="50" y="53">Librarian</text>
+    <circle class="actor" cx="250" cy="50" r="20" />
+    <text class="actor-text" x="250" y="53">Patron</text>
+    <circle class="actor" cx="150" cy="150" r="20" />
+    <text class="actor-text" x="150" y="153">Guest</text>
+    <!-- Use Case -->
+    <ellipse class="use-case" cx="150" cy="100" rx="60" ry="30" />
+    <text class="use-case-text" x="150" y="105">Issue Book</text>
+    <!-- Relationships -->
+    <path class="association" d="M70,60 L90,60" />
+    <path class="association" d="M270,60 L250,60" />
+    <path class="association" d="M270,60 L270,100" />
+    <path class="include" d="M170,40 L170,20" />
+    <path class="include" d="M170,20 L150,20" />
+</svg>
+</body>
+</html>
