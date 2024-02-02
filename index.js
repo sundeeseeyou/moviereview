@@ -21,23 +21,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let movieList = [];
 
-app.get("/", async (req,res) => {
-    try {
-        const client = await pool.connect();
-        const result = await client.query("SELECT * FROM blogpost");
-        movieList = result.rows;
-        res.render("index.ejs",{
-            recentpost: movieList,
+app.get("/", (req,res) => {
+    res.render("index.ejs",{greeting: "Hello"});
 
-        })
-    } catch (error) {
+    // try {
+    //     const client = await pool.connect();
+    //     const result = await client.query("SELECT * FROM post");
+    //     movieList = result.rows;
+    //     res.render("index.ejs",{
+    //         recentpost: movieList,
+
+    //     })
+    // } catch (error) {
         
-    } finally {
-        if (client) client.release();
-      }
-})
+    // } finally {
+    //     if (client) client.release();
+    //   }
+});
 
 
 app.listen(PORT, () => {
-    console.log("Server is running on port" + PORT);
+    console.log("Server is running on port " + PORT + " Click here to see " + `https://localhost:${PORT}`);
 })
