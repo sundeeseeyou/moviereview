@@ -39,6 +39,26 @@ app.get("/", (req,res) => {
     //   }
 });
 
+//open text editor
+app.get("/new", (req,res) => {
+    res.render("post.ejs",{
+        heading: "New Post",
+        submit: "Create"
+    })
+})
+
+app.post("/add", async (req,res) => {
+    const title = req.body.movieTitle;
+    const result = await axios.post(API_URL,{
+        params: {
+            apiKey : API_KEY,
+            t: title,
+        }
+    });
+    const response = JSON.stringify(result.data);
+    console.log(response);
+    res.render("index.ejs", {response:response})
+});
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT + " Click here to see " + `https://localhost:${PORT}`);

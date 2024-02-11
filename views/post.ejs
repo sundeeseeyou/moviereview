@@ -1,0 +1,16 @@
+<%- include('partials/header.ejs') %>
+<body>
+    <section class="container">
+        <h1>
+            <%= locals.heading %>
+        </h1>
+
+    </section>
+    <div class="editor">
+
+    </div>
+    <script>
+        var editor = new Quill('.editor');  // First matching element will be used
+    </script>
+</body>
+</html>

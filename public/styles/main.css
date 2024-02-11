@@ -6,16 +6,16 @@ html{
 
 h1{
     color: white;
-    font-size: 3rem;
+    font-size: 2rem;
     font-family: sans-serif;
-    border: 4px solid tomato;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-    background: rgb(67,1,133);
+    /* background: rgb(67,1,133); */
     background: linear-gradient(90deg, rgba(67,1,133,1) 0%, rgba(9,9,121,1) 35%, rgba(0,0,0,1) 100%);
+
  
 }
 
@@ -26,7 +26,6 @@ nav {
     justify-content: space-between;
     padding: 10px 30px;
     align-self: center;
-    flex-wrap: nowrap;
     width: auto;
 
   }
@@ -64,21 +63,10 @@ nav a.active {
 
 }
 
-section.latest{
-    display: grid;
-    width: 80vw;
-    gap: 2rem;
-    border: 3px dashed yellow;
-    position: relative;
-    top: 0;
-    right:10%;
-    left: 10%;
-    
-}
+
 
 .logo{
     max-width: 18rem;
-
 }
 
 
@@ -89,17 +77,54 @@ section.latest{
     gap: 2rem;
 }
 
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-height: 50vw;
+}
+
 .latestreview{
-    width: 300px;
-    height: 400px;
-    grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column: 1 / 3;
+    grid-row: span 2;
     background-color: green;
+    border-radius: .5rem;
+    padding: 20px;
 }
 
 .poster-list{
-    background-color: silver;
-    width: 200px;
-    height: 500px;
-    border: 3px dotted white;
+    background-color: pink;
+    padding: 2rem;
+    border-radius: 0.5rem;
 }
+
+#latest-review, #movie-rank{
+    padding: 0 10rem;
+}
+
+.container-rank{
+    display: grid;
+    grid-template-columns: .3fr 1fr 6fr;
+    gap: .5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.container-rank p{
+    padding: 0 2rem;
+}
+
+.container-rank h3{
+    padding: 0 2rem;
+}
+
+.list-item{
+    background-color: tomato;
+}
+
+
+/* .container-rank * {
+    border: 2px solid white;
+} */
