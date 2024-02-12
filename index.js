@@ -18,25 +18,18 @@ const pool = new pg.Pool({
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-
+const client = await pool.connect();
 let movieList = [];
 
-app.get("/", (req,res) => {
-    res.render("index.ejs",{greeting: "Hello"});
-
-    // try {
-    //     const client = await pool.connect();
-    //     const result = await client.query("SELECT * FROM post");
-    //     movieList = result.rows;
-    //     res.render("index.ejs",{
-    //         recentpost: movieList,
-
-    //     })
-    // } catch (error) {
-        
-    // } finally {
-    //     if (client) client.release();
-    //   }
+app.get("/", async (req,res) => {
+    try {
+        const result = await client.query('SELECT * FROM movie');
+        movieList = result.rows;
+        res.render("index.ejs",{
+            listMovie: movieList
+        })
+    } catch (error) {
+    }
 });
 
 //open text editor
@@ -62,4 +55,10 @@ app.post("/add", async (req,res) => {
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT + " Click here to see " + `https://localhost:${PORT}`);
+    process.on("SIGINT", async () => {
+        console.log("Closing database connection pool on application shutdown...");
+        await pool.end();
+        process.exit();
+      });
+
 })

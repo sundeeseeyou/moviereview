@@ -14,8 +14,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     /* background: rgb(67,1,133); */
-    background: linear-gradient(90deg, rgba(67,1,133,1) 0%, rgba(9,9,121,1) 35%, rgba(0,0,0,1) 100%);
-
+    background: linear-gradient(90deg, rgb(18, 7, 29) 0%, rgb(13, 13, 187) 65%);
+    max-height:100%;
  
 }
 
@@ -83,25 +83,44 @@ nav a.active {
     grid-template-rows: 1fr 1fr 1fr;
     gap: 1rem;
     width: 100%;
-    max-height: 50vw;
+    max-height: 40vw;
+    /* border: 3px solid yellow; */
+}
+
+.container *{
+    /* border: 2px dashed white; */
 }
 
 .latestreview{
     grid-column: 1 / 3;
     grid-row: span 2;
-    background-color: green;
-    border-radius: .5rem;
-    padding: 20px;
+    /* border: 2px dotted lime; */
+    padding: 1rem;
 }
 
+.latestreview img{
+    max-width:100%;
+    max-height:100%;
+    border-radius: .5rem;
+}
 .poster-list{
-    background-color: pink;
-    padding: 2rem;
-    border-radius: 0.5rem;
+    padding: 1rem;
+
+}
+
+.poster-list img{
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: .5rem;
+
 }
 
 #latest-review, #movie-rank{
-    padding: 0 10rem;
+    padding: 0 20rem;
+}
+
+#latest-review {
+    margin-bottom: 15rem;
 }
 
 .container-rank{
@@ -112,7 +131,7 @@ nav a.active {
     margin-bottom: 1rem;
 }
 
-.container-rank p{
+.description p{
     padding: 0 2rem;
 }
 
@@ -120,11 +139,34 @@ nav a.active {
     padding: 0 2rem;
 }
 
-.list-item{
-    background-color: tomato;
+.container-rank img{
+    max-width: 8rem;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+p.number{
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 
 /* .container-rank * {
     border: 2px solid white;
 } */
+
+footer{
+    font-size: .8rem;
+    text-align: center;
+    padding-top: 2rem;
+}
+
+footer a{
+    text-decoration: none;
+    color: inherit;
+}
+
+footer a:hover{
+    color: #FFDE59;
+}
