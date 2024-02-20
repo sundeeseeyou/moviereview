@@ -26,7 +26,7 @@ app.get("/", async (req,res) => {
     try {
         const result = await client.query('SELECT * FROM movie ORDER BY id DESC LIMIT 5');
         movieList = result.rows;
-        console.log(movieList);
+        // console.log(movieList);
         res.render("index.ejs",{
             listMovie: movieList
         })
