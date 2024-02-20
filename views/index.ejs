@@ -13,13 +13,10 @@
     <section id="latest-review">
         <h1>Latest Review</h1>
         <div class="container">
-    <% for(let item of listMovie) { %>
-        <div class="latestreview"><img src="<%= item.image_url %>"/></div>
-        <div class="poster-list"><img src="<%= item.image_url %>"/></div>
-        <div class="poster-list"><img src="<%= item.image_url %>"/></div>
-        <div class="poster-list"><img src="<%= item.image_url %>"/></div>
-        <div class="poster-list"><img src="<%= item.image_url %>"/></div>
-        <% } %>
+            <% listMovie.slice().reverse().forEach(item => { %>
+                <div class="poster-list"><img src="<%= item.image_url %>"/></div>
+                <% }) %>
+       
     </div>
     </section>
 

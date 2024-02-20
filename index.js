@@ -18,13 +18,15 @@ const pool = new pg.Pool({
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-const client = await pool.connect();
+
 let movieList = [];
 
 app.get("/", async (req,res) => {
+    const client = await pool.connect();
     try {
         const result = await client.query('SELECT * FROM movie');
         movieList = result.rows;
+        console.log(movieList);
         res.render("index.ejs",{
             listMovie: movieList
         })
