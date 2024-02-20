@@ -24,7 +24,7 @@ let movieList = [];
 app.get("/", async (req,res) => {
     const client = await pool.connect();
     try {
-        const result = await client.query('SELECT * FROM movie');
+        const result = await client.query('SELECT * FROM movie ORDER BY id DESC LIMIT 5');
         movieList = result.rows;
         console.log(movieList);
         res.render("index.ejs",{
@@ -57,10 +57,4 @@ app.post("/add", async (req,res) => {
 
 app.listen(PORT, () => {
     console.log("Server is running on port " + PORT + " Click here to see " + `https://localhost:${PORT}`);
-    process.on("SIGINT", async () => {
-        console.log("Closing database connection pool on application shutdown...");
-        await pool.end();
-        process.exit();
-      });
-
 })
