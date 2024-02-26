@@ -6,9 +6,10 @@ import env from "dotenv";
 
 const app = express();
 const PORT = 3000;
+env.config();
+
 const API_URL = process.env.API_URL;
 const API_KEY = process.env.API_KEY;
-env.config();
 
 const pool = new pg.Pool({
   user: process.env.PG_USER,
@@ -22,6 +23,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let movieList = [];
+let fetchResult = [];
 
 app.get("/", async (req, res) => {
   const client = await pool.connect();
@@ -30,7 +32,7 @@ app.get("/", async (req, res) => {
       "SELECT * FROM movie ORDER BY id DESC LIMIT 4"
     );
     movieList = result.rows;
-    // console.log(movieList);
+    console.log(movieList);
     res.render("index.ejs", {
       listMovie: movieList,
     });
@@ -42,21 +44,29 @@ app.get("/new", (req, res) => {
   res.render("post.ejs", {
     heading: "New Post",
     submit: "Create",
+    images: fetchResult,
   });
 });
 
-app.post("/add", async (req, res) => {
-  const title = req.body.movieTitle;
-  const result = await axios.post(API_URL, {
-    params: {
-      apiKey: API_KEY,
-      t: title,
-    },
-  });
-  const response = JSON.stringify(result.data);
-  console.log(response);
-  res.render("index.ejs", { response: response });
+app.post("/fetch", async (req, res) => {
+  const title = req.body.movietitle;
+  try {
+    const result = await axios.get(API_URL, {
+      params: {
+        apiKey: API_KEY,
+        t: title,
+      },
+    });
+    const response = JSON.stringify(result.data);
+    fetchResult.push(result.data.title);
+
+    res.redirect("/new");
+  } catch (error) {
+    console.log(error);
+  }
 });
+
+app.post("/add", async (req, res) => {});
 
 app.listen(PORT, () => {
   console.log(

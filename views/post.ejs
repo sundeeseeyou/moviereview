@@ -1,16 +1,43 @@
-<%- include('partials/header.ejs') %>
-<body>
-    <section class="container">
-        <h1>
-            <%= locals.heading %>
-        </h1>
+<%- include('partials/header.ejs') %> <%- include('partials/navbar.ejs') %>
 
-    </section>
-    <div class="editor">
-
+<section class="post-container">
+  <h1><%= locals.heading %></h1>
+  <%= locals.response %>
+  <%= locals.images %>
+  <form id="fetch-data" action="/fetch" method="POST">
+    <div class="form-group">
+      <div class="input-button">
+        <label for="movietitle">Movie Title</label>
+        <input
+          type="text"
+          name="movietitle"
+          placeholder="Example... Once upon a time in hollywood"
+          required
+        /><button type="submit">Fetch Data</button>
+      </div>
     </div>
-    <script>
-        var editor = new Quill('.editor');  // First matching element will be used
-    </script>
-</body>
-</html>
+    </form>
+    <form id="new-post" action="/submit" method="POST">
+      <div class="form-group">
+
+      </div>
+      <label for="post-title">Post Title</label>
+      <input
+        type="text"
+        name="post-title"
+        placeholder="What's your secret?"
+        required
+      />
+
+      <label for="textare">Write down article</label>
+      <textarea placeholder="..."></textarea>
+      <div class="input-button">
+        <label for="rating">Movie Rating</label>
+        <input type="number" name="quantity" min="1" max="10" step=".1" />
+      </div>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer.ejs') %>

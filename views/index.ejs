@@ -1,44 +1,33 @@
-<%- include('partials/header.ejs') %>
-<body>
-  <nav>
-    <a href="/"><img class="logo" src="images/logo.png" /></a>
-    <div class="link-container">
-      <a href="#home">Review</a>
-      <a href="#news">About</a>
-      <a href="#contact">Contact</a>
-      <div class="btn-yellow" type="submit">Login</div>
-    </div>
-  </nav>
+<%- include('partials/header.ejs') %> <%- include('partials/navbar.ejs') %>
 
-  <section id="latest-review">
-    <h1>Latest Review</h1>
-    <div class="container">
-      <% listMovie.slice().forEach(item => { %>
-      <div class="poster-list"><img src="<%= item.image_url %>" /></div>
-      <% }) %>
-    </div>
-  </section>
+<section id="latest-review">
+  <h1>Latest Review</h1>
+  <div class="container">
+    <% listMovie.slice().forEach(item => { %>
+    <div class="poster-list"><img src="<%= item.image_url %>" /></div>
+    <% }) %>
+  </div>
+</section>
 
-  <section id="movie-rank">
-    <h2>Top 10 Rank Movies</h2>
-    <div class="container-rank">
-      <p class="number">#1.</p>
-      <div class="poster">
-        <img
-          src="https://www.gamespot.com/a/uploads/original/1597/15975876/4191965-themarvels_27x40_imax_digital_supplemental_v3_lg.jpg"
-        />
-      </div>
-      <div class="description">
-        <h3>Movie Title</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quis,
-          voluptatibus natus culpa excepturi at ratione, maiores voluptatum
-          mollitia assumenda dolorum aut praesentium magni facere non error ipsa
-          ad! Deserunt!
-        </p>
-      </div>
+<section id="movie-rank">
+  <h2>Top 10 Rank Movies</h2>
+  <div class="container-rank">
+    <p class="number">#1.</p>
+    <div class="poster">
+      <img
+        src="https://www.gamespot.com/a/uploads/original/1597/15975876/4191965-themarvels_27x40_imax_digital_supplemental_v3_lg.jpg"
+      />
     </div>
-  </section>
+    <div class="description">
+      <h3>Movie Title</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quis,
+        voluptatibus natus culpa excepturi at ratione, maiores voluptatum
+        mollitia assumenda dolorum aut praesentium magni facere non error ipsa
+        ad! Deserunt!
+      </p>
+    </div>
+  </div>
+</section>
 
-  <%- include('partials/footer.ejs') %>
-</body>
+<%- include('partials/footer.ejs') %>
