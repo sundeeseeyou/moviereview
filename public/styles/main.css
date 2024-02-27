@@ -83,7 +83,7 @@ nav a.active {
   grid-template-rows: repeat(5, fr);
   width: 100%;
   padding: 0 10%;
-  max-height: 50vw;
+  height: 100%;
 }
 
 .poster-list {
@@ -175,9 +175,7 @@ footer {
   font-size: 0.8rem;
   text-align: center;
   padding-top: 2rem;
-
   width: 100%;
-  margin-top: 5rem;
 }
 
 footer a {

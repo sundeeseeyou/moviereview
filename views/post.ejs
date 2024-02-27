@@ -2,10 +2,10 @@
 
 <section class="post-container">
   <h1><%= locals.heading %></h1>
- 
+
   <form id="fetch-data" action="/new" method="POST">
     <div class="form-group">
-      <div class="input-button"> 
+      <div class="input-button">
         <label for="movietitle">Movie Title</label>
         <input
           type="text"
@@ -15,22 +15,17 @@
           required
         /><button type="submit">Fetch Data</button>
         <span id="status">
-          <% fetchResult.slice(-1).forEach(item => { %>
-            <% if (item.status == "False") { %>
-              <%= "No movie matched your search" %>
-              <% } else { %>
-            <p>Title: <%= item.title %></p>
-            <img src="<%= item.image %>" style="border-radius: 5px;" width="150"/>
-            <% } %>
-            <% }); %>
+          <% fetchResult.slice(-1).forEach(item => { %> <% if (item.status ==
+          "False") { %> <%= "No movie matched your search" %> <% } else { %>
+          <p>Title: <%= item.title %></p>
+          <img src="<%= item.image %>" style="border-radius: 5px" width="150" />
+          <% } %> <% }); %>
         </span>
       </div>
     </div>
-    </form>
-    <form id="new-post" action="/submit" method="POST">
-      <div class="form-group">
-
-      </div>
+  </form>
+  <form id="new-post" action="/submit" method="POST">
+    <div class="form-group">
       <label for="post-title">Post Title</label>
       <input
         type="text"
@@ -38,7 +33,6 @@
         placeholder="What's your secret?"
         required
       />
-
       <label for="textare">Write down article</label>
       <textarea placeholder="..."></textarea>
       <div class="input-button">
@@ -49,6 +43,5 @@
     </div>
   </form>
 </section>
-
 
 <%- include('partials/footer.ejs') %>
