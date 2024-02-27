@@ -2,18 +2,28 @@
 
 <section class="post-container">
   <h1><%= locals.heading %></h1>
-  <%= locals.response %>
-  <%= locals.images %>
-  <form id="fetch-data" action="/fetch" method="POST">
+ 
+  <form id="fetch-data" action="/new" method="POST">
     <div class="form-group">
-      <div class="input-button">
+      <div class="input-button"> 
         <label for="movietitle">Movie Title</label>
         <input
           type="text"
           name="movietitle"
           placeholder="Example... Once upon a time in hollywood"
+          autocomplete="off"
           required
         /><button type="submit">Fetch Data</button>
+        <span id="status">
+          <% fetchResult.slice(-1).forEach(item => { %>
+            <% if (item.status == "False") { %>
+              <%= "No movie matched your search" %>
+              <% } else { %>
+            <p>Title: <%= item.title %></p>
+            <img src="<%= item.image %>" style="border-radius: 5px;" width="150"/>
+            <% } %>
+            <% }); %>
+        </span>
       </div>
     </div>
     </form>
@@ -39,5 +49,6 @@
     </div>
   </form>
 </section>
+
 
 <%- include('partials/footer.ejs') %>

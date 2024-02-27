@@ -32,7 +32,7 @@ app.get("/", async (req, res) => {
       "SELECT * FROM movie ORDER BY id DESC LIMIT 4"
     );
     movieList = result.rows;
-    console.log(movieList);
+    // console.log(movieList);
     res.render("index.ejs", {
       listMovie: movieList,
     });
@@ -44,11 +44,11 @@ app.get("/new", (req, res) => {
   res.render("post.ejs", {
     heading: "New Post",
     submit: "Create",
-    images: fetchResult,
+    fetchResult: fetchResult,
   });
 });
 
-app.post("/fetch", async (req, res) => {
+app.post("/new", async (req, res) => {
   const title = req.body.movietitle;
   try {
     const result = await axios.get(API_URL, {
@@ -57,9 +57,20 @@ app.post("/fetch", async (req, res) => {
         t: title,
       },
     });
-    const response = JSON.stringify(result.data);
-    fetchResult.push(result.data.title);
 
+    console.log(result.data.Response);
+    fetchResult.push({
+      title: result.data.Title,
+      year: result.data.Year,
+      genre: result.data.Genre,
+      imdbrating: result.data.imdbRating,
+      image: result.data.Poster,
+      status: result.data.Response,
+    });
+
+    // res.render("post.ejs", {
+    //   response: result.data.Response,
+    // });
     res.redirect("/new");
   } catch (error) {
     console.log(error);
