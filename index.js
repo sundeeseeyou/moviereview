@@ -58,26 +58,33 @@ app.post("/new", async (req, res) => {
       },
     });
 
-    console.log(result.data.Response);
     fetchResult.push({
       title: result.data.Title,
       year: result.data.Year,
       genre: result.data.Genre,
-      imdbrating: result.data.imdbRating,
+      director: result.data.Director,
       image: result.data.Poster,
       status: result.data.Response,
     });
+    console.log(fetchResult[0]);
 
-    // res.render("post.ejs", {
-    //   response: result.data.Response,
-    // });
     res.redirect("/new");
   } catch (error) {
     console.log(error);
   }
 });
 
-app.post("/add", async (req, res) => {});
+app.post("/submit", async (req, res) => {
+  const postTitle = req.body.titlepost;
+  const articles = req.body.articles;
+  const rating = req.body.rating;
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      "INSERT INTO movie(title,year,rating,director,genre,image_url) WHERE "
+    );
+  } catch (error) {}
+});
 
 app.listen(PORT, () => {
   console.log(

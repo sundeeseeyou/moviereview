@@ -26,18 +26,18 @@
   </form>
   <form id="new-post" action="/submit" method="POST">
     <div class="form-group">
-      <label for="post-title">Post Title</label>
+      <label for="titlepost">Post Title</label>
       <input
         type="text"
-        name="post-title"
+        name="titlepost"
         placeholder="What's your secret?"
         required
       />
-      <label for="textare">Write down article</label>
-      <textarea placeholder="..."></textarea>
+      <label for="articles">Write down article</label>
+      <textarea placeholder="..." name="articles"></textarea>
       <div class="input-button">
         <label for="rating">Movie Rating</label>
-        <input type="number" name="quantity" min="1" max="10" step=".1" />
+        <input type="number" name="rating" min="1" max="10" step=".1" />
       </div>
       <button type="submit">Submit</button>
     </div>
