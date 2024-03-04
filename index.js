@@ -23,7 +23,12 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let movieList = [];
-let fetchResult = [];
+let fetchResult = [
+  {
+    title: "No Data",
+    image_url: "/images/nodata.png",
+  },
+];
 
 app.get("/", async (req, res) => {
   const client = await pool.connect();
@@ -49,7 +54,11 @@ app.get("/new", (req, res) => {
 });
 
 app.post("/new", async (req, res) => {
+  //this variable is taken from post.ejs form under name "movietitle"
   const title = req.body.movietitle;
+  //initiate the connect to the pool database
+  const client = await pool.connect();
+  //Axios to do GET from API omdb.com
   try {
     const result = await axios.get(API_URL, {
       params: {
@@ -57,20 +66,67 @@ app.post("/new", async (req, res) => {
         t: title,
       },
     });
+    const api_result = result.data;
 
-    fetchResult.push({
-      title: result.data.Title,
-      year: result.data.Year,
-      genre: result.data.Genre,
-      director: result.data.Director,
-      image: result.data.Poster,
-      status: result.data.Response,
-    });
-    console.log(fetchResult[0]);
+    /*This will check the availability of the movie from database, if it exists, just push to array fetchResult
+    Otherwise, it will INSERT INTO the database, then later on, will also push to the array fetchResult*/
+    try {
+      const response = await client.query(
+        "Select * FROM movie WHERE title = $1",
+        [api_result.Title]
+      );
+      // console.log(response.rows[0].title);
+      if (response.rows.length > 0) {
+        fetchResult.push({
+          title: response.rows[0].title,
+          year: response.rows[0].year,
+          director: response.rows[0].director,
+          genre: response.rows[0].genre,
+          image_url: response.rows[0].image_url,
+        });
+      } else {
+        try {
+          if (api_result.Response === "True") {
+            // await client.query(
+            //   "INSERT INTO movie(title, year, director, genre, image_url) VALUES ($1, $2, $3, $4, $5)",
+            //   [
+            //     api_result.Title,
+            //     api_result.Year,
+            //     api_result.Director,
+            //     api_result.Genre,
+            //     api_result.Poster,
+            //   ]
+            // );
+            fetchResult.push({
+              title: api_result.Title,
+              year: api_result.Year,
+              director: api_result.Director,
+              genre: api_result.Genre,
+              image_url: api_result.Poster,
+              status: api_result.Response,
+            });
+          } else {
+            fetchResult.push({
+              title: "The movie is not found",
+              image_url: "/images/nodata.png",
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log(fetchResult[fetchResult.length - 1]);
+    // console.log(api_result.Response);
 
     res.redirect("/new");
   } catch (error) {
     console.log(error);
+  } finally {
+    client.release();
   }
 });
 
@@ -81,7 +137,8 @@ app.post("/submit", async (req, res) => {
   const client = await pool.connect();
   try {
     const result = await client.query(
-      "INSERT INTO movie(title,year,rating,director,genre,image_url) WHERE "
+      "INSERT INTO movie(title,year,rating,director,genre,image_url) VALUES ($1,$2,$3,$4,$5,$6)",
+      [postTitle]
     );
   } catch (error) {}
 });
