@@ -89,8 +89,14 @@ nav a.active {
 .poster-list {
   padding: 1rem;
   margin: 0 0.5rem;
-  max-width: 10rem;
-  max-height: 20rem;
+  max-width: 100%;
+  max-height: 30rem;
+}
+
+.poster-list img {
+  border-radius: 0.5rem;
+  object-fit: cover;
+  min-height: 100%;
 }
 
 .form-group {
@@ -124,20 +130,13 @@ nav a.active {
   gap: 1rem;
 }
 
-.poster-list img {
-  border-radius: 0.5rem;
-  object-fit: cover;
-  width: auto;
-  height: 100%;
-}
-
 #latest-review,
 #movie-rank {
   padding: 0 10%;
 }
 
 #latest-review {
-  margin-bottom: 15%;
+  margin-bottom: 5%;
 }
 
 .container-rank {

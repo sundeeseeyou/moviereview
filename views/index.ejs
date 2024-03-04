@@ -4,7 +4,9 @@
   <h1>Latest Review</h1>
   <div class="container">
     <% listMovie.slice().forEach(item => { %>
-    <div class="poster-list"><img src="<%= item.image_url %>" /></div>
+    <div class="poster-list">
+      <img src="<%= item.image_url %>" alt="poster-image" />
+    </div>
     <% }) %>
   </div>
 </section>

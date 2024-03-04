@@ -23,7 +23,12 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let movieList = [];
-let fetchResult = [];
+let fetchResult = [
+  {
+    title: "Please fetch some data",
+    image: "/images/nodata.png",
+  },
+];
 
 app.get("/", async (req, res) => {
   const client = await pool.connect();
