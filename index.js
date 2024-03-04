@@ -83,12 +83,15 @@ app.post("/submit", async (req, res) => {
   const postTitle = req.body.titlepost;
   const articles = req.body.articles;
   const rating = req.body.rating;
+  const movie_id = Math.floor(Math.random() * 9999);
+  const writer_id = 1;
   const client = await pool.connect();
   try {
-    const result = await client.query(
-      "INSERT INTO blog (blog_title, movie_id, writer_id, rating VALUES ($1,$2,$3,$4)",
-      []
+    await client.query(
+      "INSERT INTO blog (blog_title, movie_id, writer_id, rating, blog_post VALUES ($1,$2,$3,$4,$5)",
+      [postTitle, movie_id, writer_id, rating, articles]
     );
+    res.redirect("/");
   } catch (error) {}
 });
 
