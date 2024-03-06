@@ -22,6 +22,18 @@ const pool = new pg.Pool({
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+async function matchData() {}
+
+async function apiCatch() {
+  const result = await axios.get(API_URL, {
+    params: {
+      apiKey: API_KEY,
+      t: title,
+    },
+  });
+  return result.data;
+}
+
 let movieList = [];
 let fetchResult = [
   {
@@ -53,6 +65,7 @@ app.get("/new", (req, res) => {
   });
 });
 
+//open add new post
 app.post("/new", async (req, res) => {
   const title = req.body.movietitle;
   try {
@@ -62,6 +75,7 @@ app.post("/new", async (req, res) => {
         t: title,
       },
     });
+    console.log(result.data);
 
     fetchResult.push({
       title: result.data.Title,
@@ -71,7 +85,7 @@ app.post("/new", async (req, res) => {
       image: result.data.Poster,
       status: result.data.Response,
     });
-    console.log(fetchResult[0]);
+    // console.log(fetchResult[0]);
 
     res.redirect("/new");
   } catch (error) {
@@ -83,16 +97,23 @@ app.post("/submit", async (req, res) => {
   const postTitle = req.body.titlepost;
   const articles = req.body.articles;
   const rating = req.body.rating;
-  const movie_id = Math.floor(Math.random() * 9999);
+  const movie_id = 1;
   const writer_id = 1;
   const client = await pool.connect();
+
   try {
     await client.query(
-      "INSERT INTO blog (blog_title, movie_id, writer_id, rating, blog_post VALUES ($1,$2,$3,$4,$5)",
+      "INSERT INTO blog (blog_title, movie_id, writer_id, rating, blog_post) VALUES ($1, $2, $3, $4, $5)",
       [postTitle, movie_id, writer_id, rating, articles]
     );
     res.redirect("/");
-  } catch (error) {}
+    console.log(req.body.rating);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred while saving the data.");
+  } finally {
+    client.release();
+  }
 });
 
 app.listen(PORT, () => {
