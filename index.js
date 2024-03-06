@@ -22,18 +22,6 @@ const pool = new pg.Pool({
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-async function matchData() {}
-
-async function apiCatch() {
-  const result = await axios.get(API_URL, {
-    params: {
-      apiKey: API_KEY,
-      t: title,
-    },
-  });
-  return result.data;
-}
-
 let movieList = [];
 let fetchResult = [
   {
@@ -75,7 +63,6 @@ app.post("/new", async (req, res) => {
         t: title,
       },
     });
-    console.log(result.data);
 
     fetchResult.push({
       title: result.data.Title,
@@ -97,23 +84,48 @@ app.post("/submit", async (req, res) => {
   const postTitle = req.body.titlepost;
   const articles = req.body.articles;
   const rating = req.body.rating;
-  const movie_id = 1;
-  const writer_id = 1;
   const client = await pool.connect();
 
+  fetchResult.forEach((item) => {
+    const title = item.title;
+    const year = item.year;
+    const genre = item.genre;
+    const director = item.director;
+    const image = item.image;
+  });
+
   try {
-    await client.query(
-      "INSERT INTO blog (blog_title, movie_id, writer_id, rating, blog_post) VALUES ($1, $2, $3, $4, $5)",
-      [postTitle, movie_id, writer_id, rating, articles]
-    );
-    res.redirect("/");
-    console.log(req.body.rating);
+    const result = await client.query("SELECT * FROM movie WHERE title = $1", [
+      fetchResult.title,
+    ]);
+    if (result.rows[0] > 0) {
+      res.redirect("/new");
+    } else {
+      try {
+        await client.query(
+          "INSERT INTO movies (title,year,director,genre,image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+          [title, postTitle]
+        );
+      } catch (error) {}
+    }
   } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred while saving the data.");
-  } finally {
-    client.release();
+    console.error(error);
+    res.send(500);
   }
+});
+
+app.get("/test", async (req, res) => {
+  fetchResult.forEach((item) => {
+    const title = item.title;
+    const year = item.year;
+    const genre = item.genre;
+    const director = item.director;
+    const image = item.image;
+  });
+
+  res.render("test.ejs", {
+    testing: "Hello",
+  });
 });
 
 app.listen(PORT, () => {
