@@ -18,6 +18,9 @@
           <% fetchResult.slice(-1).forEach(item => { %> <% if (item.status ==
           "False") { %> <%= "No movie matched your search" %> <% } else { %>
           <p>Title: <%= item.title %></p>
+          <p>Year: <%= item.year %></p>
+          <p>Genre: <%= item.genre %></p>
+          <p>Director: <%= item.director %></p>
           <img src="<%= item.image%>" style="border-radius: 5px" width="150" />
           <% } %> <% }); %>
         </span>

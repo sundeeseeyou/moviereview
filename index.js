@@ -22,26 +22,40 @@ const pool = new pg.Pool({
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let movieList = [];
+// let movieList = [];
 let fetchResult = [
   {
     title: "Please fetch some data",
+    year: "Please fetch some data",
+    genre: "Please fetch some data",
+    director: "Please fetch some data",
     image: "/images/nodata.png",
   },
 ];
 
-app.get("/", async (req, res) => {
+async function checkMovie() {
   const client = await pool.connect();
-  try {
-    const result = await client.query(
-      "SELECT * FROM movie ORDER BY id DESC LIMIT 4"
-    );
-    movieList = result.rows;
-    // console.log(movieList);
-    res.render("index.ejs", {
-      listMovie: movieList,
-    });
-  } catch (error) {}
+  const result = await client.query(
+    "SELECT * FROM movie ORDER BY id DESC LIMIT 4"
+  );
+  let movieList = [];
+  movieList = result.rows;
+  return movieList;
+}
+
+async function matchArray() {
+  const client = await pool.connect();
+  const result = await client.query("SELECT * FROM movie WHERE title = $1", [
+    fetchResult[fetchResult.length - 1].title,
+  ]);
+  return result;
+}
+
+app.get("/", async (req, res) => {
+  const listMovie = await checkMovie();
+  res.render("index.ejs", {
+    listMovie: listMovie,
+  });
 });
 
 //open text editor
@@ -81,37 +95,24 @@ app.post("/new", async (req, res) => {
 });
 
 app.post("/submit", async (req, res) => {
-  const postTitle = req.body.titlepost;
-  const articles = req.body.articles;
-  const rating = req.body.rating;
-  const client = await pool.connect();
-
-  fetchResult.forEach((item) => {
-    const title = item.title;
-    const year = item.year;
-    const genre = item.genre;
-    const director = item.director;
-    const image = item.image;
-  });
+  // const postTitle = req.body.titlepost;
+  // const articles = req.body.articles;
+  // const rating = req.body.rating;
+  // const client = await pool.connect();
+  const response = await matchArray();
 
   try {
-    const result = await client.query("SELECT * FROM movie WHERE title = $1", [
-      fetchResult.title,
-    ]);
-    if (result.rows[0] > 0) {
+    if (response.rowCount > 0) {
       res.redirect("/new");
     } else {
-      try {
-        await client.query(
-          "INSERT INTO movies (title,year,director,genre,image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-          [title, postTitle]
-        );
-      } catch (error) {}
+      console.log(response.rows[0].id);
+      console.log(response.rows[0].title);
     }
   } catch (error) {
-    console.error(error);
-    res.send(500);
+    console.log(error);
   }
+
+  res.render("test.ejs");
 });
 
 app.get("/test", async (req, res) => {
