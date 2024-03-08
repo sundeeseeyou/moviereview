@@ -98,15 +98,17 @@ app.post("/submit", async (req, res) => {
   const postTitle = req.body.titlepost;
   const articles = req.body.articles;
   const rating = req.body.rating;
+  let newId;
   const client = await pool.connect();
   const response = await matchArray();
 
   try {
     if (response.rowCount > 0) {
       console.log(response.rows[0].id);
+      const id = response.rows[0].id;
+      newId = id;
       res.render("test.ejs");
     } else {
-      console.log(response); //this only works for existing data
       const result = await client.query(
         "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
         [
@@ -117,12 +119,19 @@ app.post("/submit", async (req, res) => {
           lastArray.image,
         ]
       );
-      const newId = result.rows[0].id;
-      console.log(newId);
+      const id = result.rows[0].id;
+      newId = id;
+
       res.redirect("/");
     }
+
+    await client.query(
+      "INSERT INTO blog (blog_title, movie_id, rating, blog_post) VALUES ($1,$2,$3,$4)",
+      [postTitle, newId, rating, articles]
+    );
   } catch (error) {
-    await client.rollback();
+    // await client.rollback();
+    console.log(error);
   } finally {
     client.release();
   }
@@ -171,3 +180,5 @@ app.listen(PORT, () => {
       `https://localhost:${PORT}`
   );
 });
+
+//SELECT * FROM blog JOIN movie ON movie.id = movie_id;
