@@ -94,24 +94,73 @@ app.post("/new", async (req, res) => {
 });
 
 app.post("/submit", async (req, res) => {
+  const lastArray = fetchResult[fetchResult.length - 1];
   const postTitle = req.body.titlepost;
   const articles = req.body.articles;
   const rating = req.body.rating;
+  const client = await pool.connect();
   const response = await matchArray();
 
   try {
     if (response.rowCount > 0) {
+      console.log(response.rows[0].id);
       res.render("test.ejs");
     } else {
-      console.log(response.rows[0].id); //this only works for existing data
+      console.log(response); //this only works for existing data
+      const result = await client.query(
+        "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+        [
+          lastArray.title,
+          lastArray.year,
+          lastArray.genre,
+          lastArray.director,
+          lastArray.image,
+        ]
+      );
+      const newId = result.rows[0].id;
+      console.log(newId);
+      res.redirect("/");
     }
   } catch (error) {
-    console.log(error);
+    await client.rollback();
+  } finally {
+    client.release();
   }
+});
 
-  // finally {
-  //   client.release();
-  // }
+app.post("/test", async (req, res) => {
+  try {
+    if (response.rowCount > 0) {
+      console.log(response.rows[0].id);
+      res.render("test.ejs");
+    } else {
+      client
+        .query(
+          "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+          [
+            lastArray.title,
+            lastArray.year,
+            lastArray.genre,
+            lastArray.director,
+            lastArray.image,
+          ]
+        )
+        .then((result) => {
+          const newId = result.rows[0].id;
+          console.log(newId);
+          res.redirect("/");
+        })
+        .catch((error) => {
+          console.error("Error occurred during query execution:", error);
+          client.rollback();
+        });
+    }
+  } catch (error) {
+    console.error("Error occurred:", error);
+    await client.rollback();
+  } finally {
+    client.release();
+  }
 });
 
 app.listen(PORT, () => {
