@@ -22,7 +22,6 @@ const pool = new pg.Pool({
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// let movieList = [];
 let fetchResult = [
   {
     title: "Please fetch some data",
@@ -67,7 +66,7 @@ app.get("/new", (req, res) => {
   });
 });
 
-//open add new post
+//Fetching data from API and store it on Array
 app.post("/new", async (req, res) => {
   const title = req.body.movietitle;
   try {
@@ -86,7 +85,7 @@ app.post("/new", async (req, res) => {
       image: result.data.Poster,
       status: result.data.Response,
     });
-    // console.log(fetchResult[0]);
+    console.log(fetchResult[fetchResult.length - 1]);
 
     res.redirect("/new");
   } catch (error) {
@@ -95,38 +94,24 @@ app.post("/new", async (req, res) => {
 });
 
 app.post("/submit", async (req, res) => {
-  // const postTitle = req.body.titlepost;
-  // const articles = req.body.articles;
-  // const rating = req.body.rating;
-  // const client = await pool.connect();
+  const postTitle = req.body.titlepost;
+  const articles = req.body.articles;
+  const rating = req.body.rating;
   const response = await matchArray();
 
   try {
     if (response.rowCount > 0) {
-      res.redirect("/new");
+      res.render("test.ejs");
     } else {
-      console.log(response.rows[0].id);
-      console.log(response.rows[0].title);
+      console.log(response.rows[0].id); //this only works for existing data
     }
   } catch (error) {
     console.log(error);
   }
 
-  res.render("test.ejs");
-});
-
-app.get("/test", async (req, res) => {
-  fetchResult.forEach((item) => {
-    const title = item.title;
-    const year = item.year;
-    const genre = item.genre;
-    const director = item.director;
-    const image = item.image;
-  });
-
-  res.render("test.ejs", {
-    testing: "Hello",
-  });
+  // finally {
+  //   client.release();
+  // }
 });
 
 app.listen(PORT, () => {
