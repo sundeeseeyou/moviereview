@@ -103,12 +103,14 @@ app.post("/submit", async (req, res) => {
   const response = await matchArray();
 
   try {
+    //if the movie exist, it will assign the id from database, to newId
     if (response.rowCount > 0) {
       console.log(response.rows[0].id);
       const id = response.rows[0].id;
       newId = id;
       res.render("test.ejs");
     } else {
+      //if the movie doesn't exist, it will put new data to the movie column
       const result = await client.query(
         "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
         [
@@ -122,7 +124,7 @@ app.post("/submit", async (req, res) => {
       const id = result.rows[0].id;
       newId = id;
 
-      res.redirect("/");
+      res.render("test.ejs");
     }
 
     await client.query(
@@ -137,40 +139,42 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-app.post("/test", async (req, res) => {
-  try {
-    if (response.rowCount > 0) {
-      console.log(response.rows[0].id);
-      res.render("test.ejs");
-    } else {
-      client
-        .query(
-          "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-          [
-            lastArray.title,
-            lastArray.year,
-            lastArray.genre,
-            lastArray.director,
-            lastArray.image,
-          ]
-        )
-        .then((result) => {
-          const newId = result.rows[0].id;
-          console.log(newId);
-          res.redirect("/");
-        })
-        .catch((error) => {
-          console.error("Error occurred during query execution:", error);
-          client.rollback();
-        });
-    }
-  } catch (error) {
-    console.error("Error occurred:", error);
-    await client.rollback();
-  } finally {
-    client.release();
-  }
-});
+app.get("/movie:id", async (req, res) => {});
+
+// app.post("/test", async (req, res) => {
+//   try {
+//     if (response.rowCount > 0) {
+//       console.log(response.rows[0].id);
+//       res.render("test.ejs");
+//     } else {
+//       client
+//         .query(
+//           "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+//           [
+//             lastArray.title,
+//             lastArray.year,
+//             lastArray.genre,
+//             lastArray.director,
+//             lastArray.image,
+//           ]
+//         )
+//         .then((result) => {
+//           const newId = result.rows[0].id;
+//           console.log(newId);
+//           res.redirect("/");
+//         })
+//         .catch((error) => {
+//           console.error("Error occurred during query execution:", error);
+//           client.rollback();
+//         });
+//     }
+//   } catch (error) {
+//     console.error("Error occurred:", error);
+//     await client.rollback();
+//   } finally {
+//     client.release();
+//   }
+// });
 
 app.listen(PORT, () => {
   console.log(
