@@ -105,10 +105,7 @@ app.post("/submit", async (req, res) => {
   try {
     //if the movie exist, it will assign the id from database, to newId
     if (response.rowCount > 0) {
-      console.log(response.rows[0].id);
-      const id = response.rows[0].id;
-      newId = id;
-      res.render("test.ejs");
+      res.send("The post exists");
     } else {
       //if the movie doesn't exist, it will put new data to the movie column
       const result = await client.query(
@@ -123,16 +120,15 @@ app.post("/submit", async (req, res) => {
       );
       const id = result.rows[0].id;
       newId = id;
-
-      res.render("test.ejs");
     }
 
     await client.query(
       "INSERT INTO blog (blog_title, movie_id, rating, blog_post) VALUES ($1,$2,$3,$4)",
       [postTitle, newId, rating, articles]
     );
+    //when the post successfully uploaded to database, redirect to endpoint /
+    res.redirect("/");
   } catch (error) {
-    // await client.rollback();
     console.log(error);
   } finally {
     client.release();
