@@ -127,7 +127,7 @@ app.post("/submit", async (req, res) => {
       [postTitle, newId, rating, articles]
     );
     //when the post successfully uploaded to database, redirect to endpoint /
-    res.redirect("/");
+    res.render("movie.ejs");
   } catch (error) {
     console.log(error);
   } finally {
@@ -136,41 +136,6 @@ app.post("/submit", async (req, res) => {
 });
 
 app.get("/movie:id", async (req, res) => {});
-
-// app.post("/test", async (req, res) => {
-//   try {
-//     if (response.rowCount > 0) {
-//       console.log(response.rows[0].id);
-//       res.render("test.ejs");
-//     } else {
-//       client
-//         .query(
-//           "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-//           [
-//             lastArray.title,
-//             lastArray.year,
-//             lastArray.genre,
-//             lastArray.director,
-//             lastArray.image,
-//           ]
-//         )
-//         .then((result) => {
-//           const newId = result.rows[0].id;
-//           console.log(newId);
-//           res.redirect("/");
-//         })
-//         .catch((error) => {
-//           console.error("Error occurred during query execution:", error);
-//           client.rollback();
-//         });
-//     }
-//   } catch (error) {
-//     console.error("Error occurred:", error);
-//     await client.rollback();
-//   } finally {
-//     client.release();
-//   }
-// });
 
 app.listen(PORT, () => {
   console.log(
