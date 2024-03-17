@@ -99,6 +99,7 @@ app.post("/submit", async (req, res) => {
   const articles = req.body.articles;
   const rating = req.body.rating;
   let newId;
+  let movieName;
   const client = await pool.connect();
   const response = await matchArray();
 
@@ -109,7 +110,7 @@ app.post("/submit", async (req, res) => {
     } else {
       //if the movie doesn't exist, it will put new data to the movie column
       const result = await client.query(
-        "INSERT INTO movie (title, year, genre, director, image_url) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+        "INSERT INTO movie (title, year, genre, director, image_url) VALUES (LOWER($1),$2,$3,$4,$5) RETURNING *",
         [
           lastArray.title,
           lastArray.year,
@@ -119,15 +120,20 @@ app.post("/submit", async (req, res) => {
         ]
       );
       const id = result.rows[0].id;
+      const movie = result.rows[0].title;
       newId = id;
+      movieName = movie;
     }
+
+    const formatName = movieName.replace(/\s+/g, "-");
 
     await client.query(
       "INSERT INTO blog (blog_title, movie_id, rating, blog_post) VALUES ($1,$2,$3,$4)",
       [postTitle, newId, rating, articles]
     );
-    //when the post successfully uploaded to database, redirect to endpoint /
-    res.render("movie.ejs");
+    //when the post successfully uploaded to database, redirect to endpoint /movie/:name
+
+    res.redirect(`/movie/${formatName}`);
   } catch (error) {
     console.log(error);
   } finally {
@@ -135,7 +141,36 @@ app.post("/submit", async (req, res) => {
   }
 });
 
-app.get("/movie:id", async (req, res) => {});
+app.get("/movie/:name", async (req, res) => {
+  const name = req.params.name;
+  const unformat = name
+    .split("-")
+    .map((word) => word.charAt(0) + word.slice(1))
+    .join(" ");
+
+  const client = await pool.connect();
+
+  try {
+    const result = await client.query(
+      "SELECT * FROM movie JOIN blog ON blog.movie_id = movie.id WHERE title = $1",
+      [unformat]
+    );
+    const data = result.rows[0];
+    console.log(data.title);
+    res.render("movie.ejs", {
+      title: data.title,
+      rating: data.rating,
+      year: data.year,
+      image: data.image_url,
+      director: data.director,
+      blog_title: data.blog_title,
+      post: data.blog_post,
+    });
+  } catch (error) {
+    console.log(error);
+    res.send("Movie not exists");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(
@@ -146,4 +181,32 @@ app.listen(PORT, () => {
   );
 });
 
-//SELECT * FROM blog JOIN movie ON movie.id = movie_id;
+//SELECT * FROM movie JOIN blog ON blog.movie_id = movie.id;
+//option
+//SELECT * FROM movie INNER JOIN blog ON blog.movie_id = movie.id WHERE title = 'La La Land';
+
+//to format name of the movie into dashed
+/*// Assuming you have the API response stored in a variable called 'apiResponse'
+
+// Get the value from the API response
+const movieName = apiResponse.name;
+
+// Convert the string to lowercase
+const lowercaseName = movieName.toLowerCase();
+
+// Replace spaces with dashes ("-")
+const formattedName = lowercaseName.replace(/\s+/g, '-');
+
+console.log(name.toLowerCase().replace(/\s+/g, '-'))
+
+console.log(formattedName); // Output: shawshank-redemption
+*/
+
+/*
+try {
+    const result = await db.query(
+      "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE '%' || $1 || '%';",
+      [input.toLowerCase()]
+    );
+    
+    */

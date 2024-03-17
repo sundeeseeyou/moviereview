@@ -98,14 +98,14 @@ nav a.active {
   grid-gap: 1rem;
 }
 
-.post-container {
+/* .post-container {
   display: grid;
   grid-template-columns: repeat(3, fr);
   grid-template-rows: repeat(5, fr);
   width: 100%;
   padding: 0 10%;
   height: 100%;
-}
+} */
 
 .poster-list {
   padding: 1rem;
@@ -116,7 +116,7 @@ nav a.active {
 
 .poster-list img {
   width: 100%; /* Make images fill their container */
-  height: auto; /* Maintain aspect ratio */
+  height: 100%; /* Maintain aspect ratio */
   border-radius: 0.5rem;
   object-fit: cover;
 }

@@ -1,11 +1,16 @@
-<%- include('partials/header.ejs') %> <%- include('partials/navbar.ejs') %>
+<%- include("partials/header.ejs") %> <%- include("partials/navbar.ejs") %>
 
-<section>
-  <h1></h1>
+<section class="container">
+  <h1><%= locals.title %></h1>
+  <p><%= locals.year %></p>
+  <p><%= locals.rating %></p>
   <div class="apidata">
-    <img src="" />
+    <img src="<%= locals.image %> height=200" />
   </div>
-  <div class="postdata"></div>
+  <div class="postdata">
+    <h2><%= locals.blog_title %></h2>
+    <p><%= locals.post %></p>
+  </div>
 </section>
 
-<%- include('partials/footer.ejs') %>
+<%- include("partials/footer.ejs") %>
