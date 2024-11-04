@@ -156,7 +156,7 @@ app.get("/movie/:name", async (req, res) => {
       [unformat]
     );
     const data = result.rows[0];
-    console.log(data.title);
+    // console.log(data.title);
     res.render("movie.ejs", {
       title: data.title,
       rating: data.rating,

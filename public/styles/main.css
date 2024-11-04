@@ -211,5 +211,13 @@ footer a:hover {
 .single-post {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: end;
+  width: 80vw;
+}
+
+.banner-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  width: 80vw;
 }
